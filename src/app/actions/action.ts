@@ -53,7 +53,9 @@ export const klasuAction = async (question: string) => {
           candidates: { content: { parts: { text: string }[] } }[];
         }>,
     )
-    .then((data) => console.log(data.candidates[0]?.content.parts[0]?.text));
+    .then((data) => (data.candidates[0]?.content.parts[0]?.text));
+  
+  console.log(data, 'data from server')
 
   return data;
 };
