@@ -1,25 +1,9 @@
-"use server";
+// app/api/chat/route.ts
+import { NextResponse } from "next/server";
 
-import { tool } from "ai";
-import { z } from "zod";
-import { createResource } from "~/lib/actions/resources";
+export async function POST(req: Request) {
+  const { question } = await req.json();
 
-
-const tools = {
-  addResource: tool({
-    description: `Add a resource to your knowledge base. If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
-    parameters: z.object({
-      content: z
-        .string()
-        .describe("The content or resource to add to the knowledge base"),
-    }),
-    execute: async ({ content }) => createResource({ content }),
-  }),
-};
-
-
-export const klasuAction = async (question: string) => {
-  
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.GEMINI_API_KEY}`,
     {
@@ -66,19 +50,18 @@ export const klasuAction = async (question: string) => {
     },
   );
 
-  const data = (await response.json()) as {
-    candidates: { content: { parts: { text: string }[] } }[];
-  };
+  if (!response.ok) {
+    return NextResponse.json(
+      { error: "Failed to fetch data from API" },
+      { status: response.status },
+    );
+  }
 
-  // Extract the response text
+  const data = await response.json();
   const answer =
-    data.candidates[0]?.content.parts[0]?.text ?? "No answer available";
-
- 
-    await tools.addResource.execute({
-      content: answer
-    });
+    data.candidates[0]?.content.parts[0]?.text || "No answer available";
   
+  console.log(answer)
 
-  return answer;
-};
+  return NextResponse.json({ answer });
+}
