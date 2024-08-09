@@ -7,9 +7,9 @@ import Klaus from "~/components/klaus";
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
 
-  console.log(hello, "this is post");
-
   void api.post.getLatest.prefetch();
+
+
 
   return (
     <HydrateClient>
