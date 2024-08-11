@@ -1,15 +1,14 @@
-"use server";
-
+import { sql } from "drizzle-orm";
+import { db } from "~/server/db_drizzle/";
+import { embeddings as embeddingsTable } from "~/server/db_drizzle/schema";
+import { generateEmbeddings } from "../ai/embedding";
 import {
   NewResourceParams,
   insertResourceSchema,
   resources,
 } from "~/server/db_drizzle/resources";
-import { db } from "~/server/db_drizzle/";
-import { generateEmbeddings } from "../ai/embedding";
-import { embeddings as embeddingsTable } from "~/server/db_drizzle/schema";
 
-export const createResource = async (input: NewResourceParams) => {
+export async function createResource(input: NewResourceParams) {
   try {
     const { content } = insertResourceSchema.parse(input);
 
@@ -18,18 +17,30 @@ export const createResource = async (input: NewResourceParams) => {
       .values({ content })
       .returning();
 
-    const embeddings = await generateEmbeddings(content);
-    await db.insert(embeddingsTable).values(
-      embeddings.map((embedding) => ({
-        resourceId: resource.id,
-        ...embedding,
-      })),
-    );
+    if (!resource) {
+      throw new Error("Failed to create resource");
+    }
 
-    return "Resource successfully created and embedded.";
+   const embeddings = await generateEmbeddings(content);
+   await db.insert(embeddingsTable).values(
+     embeddings.map((embedding) => ({
+       resourceId: resource.id,
+       ...embedding,
+     })),
+   );
+
+    return {
+      success: true,
+      message: "Resource successfully created and embedded.",
+    };
   } catch (error) {
-    return error instanceof Error && error.message.length > 0
-      ? error.message
-      : "Error, please try again.";
+    console.error("Error in createResource:", error);
+    return {
+      success: false,
+      message:
+        error instanceof Error && error.message.length > 0
+          ? error.message
+          : "Error, please try again.",
+    };
   }
-};
+}

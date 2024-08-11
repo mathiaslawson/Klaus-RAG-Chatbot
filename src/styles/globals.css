@@ -65,5 +65,18 @@
   }
   body {
     @apply bg-background text-foreground;
+    @apply relative bg-white z-0;
+    /* background-image: linear-gradient(45deg, #301e1e 15%, #ffffff 85%); */
+  }
+
+  
+
+  body::before {
+    content: "";
+    @apply absolute top-0 left-0 w-full h-full;
+    /* background-image: url("/assets/images/mesh.png"); */
+    background-size: cover;
+    opacity: 0.2;
+    z-index: -1;
   }
 }

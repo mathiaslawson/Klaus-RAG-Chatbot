@@ -15,6 +15,20 @@
       "when": 1723203235062,
       "tag": "0001_bent_blockbuster",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1723329239154,
+      "tag": "0002_right_cannonball",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1723332809070,
+      "tag": "0003_fluffy_toad_men",
+      "breakpoints": true
     }
   ]
 }
