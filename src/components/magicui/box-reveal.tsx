@@ -22,15 +22,15 @@ export const BoxReveal = ({
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  useEffect(() => {
-    if (isInView) {
-      slideControls.start("visible");
-      mainControls.start("visible");
-    } else {
-      slideControls.start("hidden");
-      mainControls.start("hidden");
-    }
-  }, [isInView, mainControls, slideControls]);
+ useEffect(() => {
+  if (isInView) {
+    slideControls.start("visible").catch(console.error);
+    mainControls.start("visible").catch(console.error);
+  } else {
+    slideControls.start("hidden").catch(console.error);
+    mainControls.start("hidden").catch(console.error);
+  }
+}, [isInView, mainControls, slideControls]);
 
   return (
     <div ref={ref} style={{ position: "relative", width, overflow: "hidden" }}>
