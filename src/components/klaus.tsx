@@ -15,8 +15,9 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
-import { Send, User } from "lucide-react";
 import { cn } from "~/lib/utils";
+import { Send, User } from "lucide-react";
+
 import {
   Tooltip,
   TooltipContent,
