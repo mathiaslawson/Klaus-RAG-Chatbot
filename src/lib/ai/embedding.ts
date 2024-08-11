@@ -87,12 +87,16 @@ export const findRelevantContent = async (userQuery: string) => {
       embeddings.embedding,
       userQueryEmbedded,
     )})`;
+
+  
     const similarGuides = await db
       .select({ name: embeddings.content, similarity })
       .from(embeddings)
-      .where(gt(similarity, 0.7))
+      .where(gt(similarity, 0.3))
       .orderBy((t) => desc(t.similarity))
       .limit(4);
+    
+    console.log("Similar guides:", similarGuides);
     return similarGuides;
   } catch (error) {
     console.error("Error finding relevant content:", error);

@@ -1,38 +1,17 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
+// schema.ts
 
 import { sql } from "drizzle-orm";
-import {
-  index,
-  pgTableCreator,
-  serial,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { index, pgTableCreator, timestamp, varchar } from "drizzle-orm/pg-core";
 import { nanoid } from "~/lib/utils";
 import { pgTable, text, vector } from "drizzle-orm/pg-core";
+
+// Import the resources table from its file
 import { resources } from "./resources";
 
+// Ensure the resources table is exported for external use
+export { resources };
 
 export const createTable = pgTableCreator((name) => `mock_${name}`);
-
-// export const posts = createTable(
-//   "post",
-//   {
-//     id: serial("id").primaryKey(),
-//     name: varchar("name", { length: 256 }),
-//     createdAt: timestamp("created_at", { withTimezone: true })
-//       .default(sql`CURRENT_TIMESTAMP`)
-//       .notNull(),
-//     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-//       () => new Date(),
-//     ),
-//   },
-//   (example) => ({
-//     nameIndex: index("name_idx").on(example.name),
-//   }),
-// );
-
 
 export const embeddings = pgTable(
   "embeddings",

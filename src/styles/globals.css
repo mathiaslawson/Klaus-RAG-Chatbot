@@ -76,7 +76,7 @@
     @apply absolute top-0 left-0 w-full h-full;
     background-image: url("/assets/images/main.png");
     background-size: "";
-    opacity: 0.4;
+    opacity: 0.9;
     z-index: -1;
   }
 }

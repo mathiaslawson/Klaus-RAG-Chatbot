@@ -1,25 +1,29 @@
-import { openai } from "@ai-sdk/openai";
-import { anthropic } from "@ai-sdk/anthropic";
-import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { convertToCoreMessages, streamText, tool } from "ai";
 import { z } from "zod";
 import { createResource } from "~/lib/actions/resources";
 import { generateEmbedding } from "~/lib/ai/embedding";
-
+import { findRelevantContent } from "~/lib/ai/embedding";
+import kv from "@vercel/kv";
 
 // Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+export const maxDuration = 5;
+
+
+const cache = new Map<string, string>();
 
 interface MessageType {
   role: "user" | "assistant" | "system";
   content: string;
 }
 
+
 export async function POST(req: Request) {
 
   const { messages }: { messages: MessageType[] } = await req.json() as { messages: MessageType[] };
 
+
+  
 
   const google = createGoogleGenerativeAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -44,8 +48,17 @@ export async function POST(req: Request) {
             .optional()
             .describe("the embedding of the content"),
         }),
-        execute: async ({ content, embedding }: { content: string; embedding?: string }) => {
-          const embeddingValue = embedding ?? await generateEmbedding(content);
+        execute: async ({ content, embedding }:
+          { content: string; embedding?: string }) => {
+          
+          
+          
+          const embeddingValue =
+            embedding ??
+            (await findRelevantContent(content).then((res) => {
+              console.log(res, 'from within');
+            })) ??
+            (await generateEmbedding(content));
                    
           return createResource({ content, embedding: embeddingValue } as { content: string; embedding?: string });
         },
