@@ -24,7 +24,7 @@ let notifications = [
     name: "Vector Embeddings with Supabase",
     description: "Text Embeddings with Supabase",
     time: "",
-    icon: "https://yt3.googleusercontent.com/NuBWxGpdF0YzNSr7x_Tc8EEFXbQoHc0Xf9rU_ehxFPRikw8YPN886HltWeMDihKU8v5SeKFI3B4=s900-c-k-c0x00ffffff-no-rj",
+    icon: "https://miro.medium.com/v2/resize:fit:1400/0*QzPzYLTNRX7p5Rsl",
     color: "#FFB800",
   },
   {
